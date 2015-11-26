@@ -1,4 +1,5 @@
-from database import Database
+from models import User
 
-sql = 'SELECT * FROM User;'
-print (Database.fetchall(sql))
+
+me = User.query.filter_by(name='yu').first()
+print (me.email)

@@ -40,8 +40,8 @@ ON _User (name);
 CREATE TABLE TagUser (
 	id SERIAL,
 	tagName VARCHAR(20) NOT NULL,
-	idActivity INTEGER NOT NULL,
-	FOREIGN KEY (idActivity) REFERENCES Activity(id),
+	idUser INTEGER NOT NULL,
+	FOREIGN KEY (idUser) REFERENCES _User(id),
 	PRIMARY KEY(id)
 );
 
