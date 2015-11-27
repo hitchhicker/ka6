@@ -1,18 +1,14 @@
-from sqlalchemy import create_engine, MetaData
+# -*- coding: utf-8 -*-
 from setting import DATABASE as DB
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 
-database = DB['database']
-user = DB['user']
-password = DB['password']
-host = DB['host']
-
 engine = create_engine('postgresql://%s:%s@%s/%s' % (
-	user,
-	password,
-	host,
-	database), convert_unicode=True)
+	DB['user'],
+	DB['password'],
+	DB['host'],
+	DB['database']), convert_unicode=True)
 
 metadata = MetaData(bind=engine)
 
