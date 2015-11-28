@@ -20,6 +20,34 @@ class User(object):
 	def __repr__(self):
 		return '<User %r>' % (self.name)
 
+users = Table('_user', metadata, autoload=True)
+
+
+class Activity(object):
+    query = db_session.query_property()
+
+    def __init__(
+        self,
+        title,
+        start_date,
+        end_date,
+        publish_date,
+        allow_number,
+        like_number,
+        canceld):
+        self.title = title
+        self.start_date = start_date
+        self.end_date = end_date
+        self.publish_date = publish_date
+        self.allow_number = allow_number
+        self.like_number = like_number
+        self.canceld = canceld
+
+    def __repr__(self):
+        return '<Activity %r>' % (self.title)
+
+activity = Table('activity', metadata, autoload=True)
+
 
 class TagUser(object):
     query = db_session.query_property()
@@ -36,39 +64,6 @@ class TagUser(object):
         return '<TagUser %r>' % (self.tag_name)
 
 tag_user = Table('taguser', metadata, autoload=True)
-users = Table('_user', metadata, autoload=True)
-
-mapper(User, users, properties={
-    'tags': relationship(TagUser)})
-mapper(TagUser, tag_user, properties={
-    'users': relationship(User)})
-
-
-class Activity(object):
-	query = db_session.query_property()
-
-	def __init__(
-		self,
-		title,
-		start_date,
-		end_date,
-		publish_date,
-		allow_number,
-		like_number,
-		canceld):
-		self.title = title
-		self.start_date = start_date
-		self.end_date = end_date
-		self.publish_date = publish_date
-		self.allow_number = allow_number
-		self.like_number = like_number
-		self.canceld = canceld
-
-	def __repr__(self):
-		return '<Activity %r>' % (self.title)
-
-activity = Table('activity', metadata, autoload=True)
-mapper(Activity, activity)
 
 
 class TagActivity(object):
@@ -82,7 +77,6 @@ class TagActivity(object):
 		return '<Tag %r>' % (self.tagName)
 
 tag_activity = Table('tagactivity', metadata, autoload=True)
-mapper(TagActivity, tag_activity)
 
 
 class UserActivity(object):
@@ -94,7 +88,6 @@ class UserActivity(object):
         self.join_date = join_date
 
 user_activity = Table('useractivity', metadata, autoload=True)
-mapper(UserActivity, user_activity)
 
 
 class ActivityContent(object):
@@ -105,7 +98,6 @@ class ActivityContent(object):
         self.content = content
 
 activity_content = Table('activitycontent', metadata, autoload=True)
-mapper(ActivityContent, activity_content)
 
 
 class Comment(object):
@@ -129,7 +121,6 @@ class Comment(object):
         return '<Comment %r >' % self.body
 
 comment = Table('comment', metadata, autoload=True)
-mapper(Comment, comment)
 
 
 class Following(object):
@@ -141,7 +132,6 @@ class Following(object):
         self.follow_date = follow_date
 
 following = Table('following', metadata, autoload=True)
-mapper(Following, following)
 
 
 class Follower(object):
@@ -153,7 +143,6 @@ class Follower(object):
         self.follow_date = follow_date
 
 follower = Table('follower', metadata, autoload=True)
-mapper(Follower, follower)
 
 
 class ActivityFollowing(object):
@@ -165,7 +154,6 @@ class ActivityFollowing(object):
         self.follow_date = follow_date
 
 activity_following = Table('activity_following', metadata, autoload=True)
-mapper(ActivityFollowing, activity_following)
 
 
 class ActivityFollower(object):
@@ -177,7 +165,6 @@ class ActivityFollower(object):
         self.follow_date = follow_date
 
 activity_follower = Table('activity_follower', metadata, autoload=True)
-mapper(ActivityFollower, activity_follower)
 
 
 class Friends(object):
@@ -189,7 +176,6 @@ class Friends(object):
         self.add_date = add_date
 
 friends = Table('friends', metadata, autoload=True)
-mapper(Friends, friends)
 
 
 class Invitation(object):
@@ -207,7 +193,6 @@ class Invitation(object):
         self.invite_date = invite_date
 
 invitation = Table('invitation', metadata, autoload=True)
-mapper(Invitation, invitation)
 
 
 class Conversation(object):
@@ -219,7 +204,6 @@ class Conversation(object):
         self.time = time
 
 conversation = Table('conversation', metadata, autoload=True)
-mapper(Conversation, conversation)
 
 
 class Reply(object):
@@ -231,7 +215,6 @@ class Reply(object):
         self.conversation_id = conversation_id
 
 reply = Table('reply', metadata, autoload=True)
-mapper(Reply, reply)
 
 
 class Broadcast(object):
@@ -249,7 +232,6 @@ class Broadcast(object):
         self.send_date = send_date
 
 broadcast = Table('broadcast', metadata, autoload=True)
-mapper(Broadcast, broadcast)
 
 
 class Click(object):
@@ -261,7 +243,6 @@ class Click(object):
         self.click_date = click_date
 
 click = Table('click', metadata, autoload=True)
-mapper(Click, click)
 
 
 class Search(object):
@@ -273,7 +254,6 @@ class Search(object):
         self.search_date = search_date
 
 search = Table('search', metadata, autoload=True)
-mapper(Search, search)
 
 
 class Like(object):
@@ -285,4 +265,37 @@ class Like(object):
         self.likeate = like_date
 
 like = Table('l1ke', metadata, autoload=True)
+
+# configuration mapping
+mapper(User, users, properties={
+    'tags': relationship(TagUser),
+    'activities': relationship(UserActivity),
+    'comments': relationship(Comment),
+    'clicks': relationship(Click),
+    'searchs': relationship(Search),
+    'likes': relationship(Like), })
+mapper(Activity, activity, properties={
+    'tags': relationship(TagActivity),
+    'users': relationship(UserActivity),
+    'contents': relationship(ActivityContent),
+    'commnets': relationship(Comment),
+    'clicks': relationship(Click),
+    'searchs': relationship(Search),
+    'likes': relationship(Like), })
+mapper(TagUser, tag_user)
+mapper(TagActivity, tag_activity)
+mapper(UserActivity, user_activity)
+mapper(ActivityContent, activity_content)
+mapper(Comment, comment)
+mapper(Following, following)
+mapper(Follower, follower)
+mapper(ActivityFollowing, activity_following)
+mapper(ActivityFollower, activity_follower)
+mapper(Friends, friends)
+mapper(Invitation, invitation)
+mapper(Conversation, conversation)
+mapper(Reply, reply)
+mapper(Broadcast, broadcast)
+mapper(Click, click)
+mapper(Search, search)
 mapper(Like, like)
