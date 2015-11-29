@@ -3,16 +3,35 @@
 CREATE DATABASE ka6; 
 \c ka6
 
+CREATE TABLE Location (
+	id SERIAL,
+	id_location INTEGER NOT NULL,
+	region VARCHAR(255) NOT NULL,
+	city VARCHAR(255) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE Address (
+	id SERIAL,
+	area VARCHAR(255) NOT NULL,
+	street VARCHAR(255) NOT NULL, /*include street number*/
+	id_location INTEGER NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (id_location) REFERENCES Location(id)
+);
+
 CREATE TABLE Activity (
 	id SERIAL,
 	title VARCHAR(255) NOT NULL,
 	start_date TIMESTAMP WITH TIME ZONE NOT NULL,
 	end_date TIMESTAMP WITH TIME ZONE NOT NULL,
 	publish_date TIMESTAMP WITH TIME ZONE NOT NULL,
+	id_address INTEGER NOT NULL,
 	allow_number INTEGER, /*if allowNumber is null, it means infinite*/
 	like_number INTEGER DEFAULT 0,
 	canceld BOOLEAN DEFAULT FALSE,
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	FOREIGN KEY (id_address) REFERENCES Address(id)
 );
 CREATE INDEX index_title
 ON Activity (title);
@@ -32,6 +51,7 @@ CREATE TABLE _User (
 	email VARCHAR(255) UNIQUE NOT NULL,
 	password CHAR(32) NOT  NULL, /*if we use MD5 password will be size of 32 bytes*/
 	name VARCHAR(255) NOT NULL,
+	location TEXT NOT NULL,
 	PRIMARY KEY (id)
 );
 CREATE INDEX index_username
@@ -52,6 +72,14 @@ CREATE TABLE UserActivity (
 	PRIMARY KEY(id_user,id_activity),
 	FOREIGN KEY (id_user) REFERENCES _User(id),
 	FOREIGN KEY (id_activity) REFERENCES Activity(id)
+);
+
+CREATE TABLE UserLocation (
+	id_user INTEGER NOT NULL,
+	id_location INTEGER NOT NULL,
+	PRIMARY KEY(id_user, id_location),
+	FOREIGN KEY (id_user) REFERENCES _User(id),
+	FOREIGN KEY (id_location) REFERENCES Location(id)
 );
 
 CREATE TABLE ActivityContent (

@@ -3,6 +3,34 @@ from sqlalchemy import Table
 from sqlalchemy.orm import mapper, relationship
 
 
+class Location(object):
+    query = db_session.query_property()
+
+    def __init__(self, id_location, region, city):
+        self.id_location = id_location
+        self.region = region
+        self.city = city
+
+    def __repr__(self):
+        return '<Location %r>' % (self.city)
+
+location = Table('location', metadata, autoload=True)
+
+
+class Address(object):
+    query = db_session.query_property()
+
+    def __init__(self, area, street, id_location):
+        self.area = area
+        self.street = street
+        self.id_location = id_location
+
+    def __repr__(self):
+        return '<Address %r>' % (self.street)
+
+address = Table('address', metadata, autoload=True)
+
+
 class User(object):
 	query = db_session.query_property()
 
@@ -88,6 +116,16 @@ class UserActivity(object):
         self.join_date = join_date
 
 user_activity = Table('useractivity', metadata, autoload=True)
+
+
+class UserLocation(object):
+    query = db_session.query_property()
+
+    def __init__(self, id_user, id_location):
+        self.id_user = id_user
+        self.id_location = id_location
+
+user_location = Table('userlocation', metadata, autoload=True)
 
 
 class ActivityContent(object):
@@ -267,6 +305,8 @@ class Like(object):
 like = Table('l1ke', metadata, autoload=True)
 
 # configuration mapping
+mapper(Location, location)
+mapper(Address, address)
 mapper(User, users, properties={
     'tags': relationship(TagUser),
     'activities': relationship(UserActivity),
@@ -285,6 +325,8 @@ mapper(Activity, activity, properties={
 mapper(TagUser, tag_user)
 mapper(TagActivity, tag_activity)
 mapper(UserActivity, user_activity)
+mapper(UserLocation, user_location, properties={
+    'users': relationship(User), })
 mapper(ActivityContent, activity_content)
 mapper(Comment, comment)
 mapper(Following, following)
