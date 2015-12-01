@@ -30,11 +30,10 @@ def signup():
 			email = request.values.get('email')
 			password = request.values.get('password')
 			name = request.values.get('nickname')
-			print (email)
 		except KeyError:
 			print ('key error')  # TODO
 			raise
-		# add_user(email, password, name)
+		add_user(email, password, name)
 		return render_template('signup_step_2.html')
 
 

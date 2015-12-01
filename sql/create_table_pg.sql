@@ -5,7 +5,7 @@ CREATE DATABASE ka6;
 
 CREATE TABLE Location (
 	id SERIAL,
-	id_location INTEGER NOT NULL,
+	country VARCHAR(255) NOT NULL,
 	region VARCHAR(255) NOT NULL,
 	city VARCHAR(255) NOT NULL,
 	PRIMARY KEY (id)
@@ -51,8 +51,10 @@ CREATE TABLE _User (
 	email VARCHAR(255) UNIQUE NOT NULL,
 	password CHAR(32) NOT  NULL, /*if we use MD5 password will be size of 32 bytes*/
 	name VARCHAR(255) NOT NULL,
-	location TEXT NOT NULL,
-	PRIMARY KEY (id)
+	id_location INTEGER,
+	PRIMARY KEY (id),
+	FOREIGN KEY (id_location) REFERENCES Location(id)
+
 );
 CREATE INDEX index_username
 ON _User (name);
@@ -72,14 +74,6 @@ CREATE TABLE UserActivity (
 	PRIMARY KEY(id_user,id_activity),
 	FOREIGN KEY (id_user) REFERENCES _User(id),
 	FOREIGN KEY (id_activity) REFERENCES Activity(id)
-);
-
-CREATE TABLE UserLocation (
-	id_user INTEGER NOT NULL,
-	id_location INTEGER NOT NULL,
-	PRIMARY KEY(id_user, id_location),
-	FOREIGN KEY (id_user) REFERENCES _User(id),
-	FOREIGN KEY (id_location) REFERENCES Location(id)
 );
 
 CREATE TABLE ActivityContent (

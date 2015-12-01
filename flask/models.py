@@ -7,8 +7,9 @@ from sqlalchemy.orm import mapper, relationship
 class Location(object):
     query = db_session.query_property()
 
-    def __init__(self, id_location, region, city):
-        self.id_location = id_location
+    def __init__(self, country, region, city):
+        self.id = None
+        self.country = country
         self.region = region
         self.city = city
 
@@ -22,6 +23,7 @@ class Address(object):
     query = db_session.query_property()
 
     def __init__(self, area, street, id_location):
+        self.id = None
         self.area = area
         self.street = street
         self.id_location = id_location
@@ -35,8 +37,15 @@ address = Table('address', metadata, autoload=True)
 class User(object):
     query = db_session.query_property()
 
-    def __init__(self, email, password, name, location, image=None):
-        self.location = location
+    def __init__(
+        self,
+        email,
+        password,
+        name,
+        id_location=None,
+        image=None):
+        self.id = None
+        self.id_location = id_location
         self.image = image
         self.email = email
         self.password = password
@@ -61,6 +70,7 @@ class Activity(object):
         like_number,
         canceld,
         id_address):
+        self.id = None
         self.title = title
         self.start_date = start_date
         self.end_date = end_date
@@ -78,12 +88,9 @@ activity = Table('activity', metadata, autoload=True)
 
 class TagUser(object):
     query = db_session.query_property()
-    # user = relationship(
-    #     'User',
-    #     backref='User.id',
-    #     primaryjoin='TagUser.id_user==User.id')
 
     def __init__(self, tag_name, id_user):
+        self.id = None
         self.tag_name = tag_name
         self.id_user = id_user
 
@@ -94,14 +101,15 @@ tag_user = Table('taguser', metadata, autoload=True)
 
 
 class TagActivity(object):
-	query = db_session.query_property()
+    query = db_session.query_property()
 
-	def __init__(self, tag_name, id_activity):
-		self.tag_name = tag_name
-		self.id_activity = id_activity
+    def __init__(self, tag_name, id_activity):
+        self.id = None
+        self.tag_name = tag_name
+        self.id_activity = id_activity
 
-	def __repr__(self):
-		return '<Tag %r>' % (self.tagName)
+    def __repr__(self):
+        return '<Tag %r>' % (self.tagName)
 
 tag_activity = Table('tagactivity', metadata, autoload=True)
 
@@ -115,16 +123,6 @@ class UserActivity(object):
         self.join_date = join_date
 
 user_activity = Table('useractivity', metadata, autoload=True)
-
-
-class UserLocation(object):
-    query = db_session.query_property()
-
-    def __init__(self, id_user, id_location):
-        self.id_user = id_user
-        self.id_location = id_location
-
-user_location = Table('userlocation', metadata, autoload=True)
 
 
 class ActivityContent(object):
@@ -147,7 +145,7 @@ class Comment(object):
         id_user,
         comment_date,
         body):
-
+        self.id = None
         self.id_activity = id_activity
         self.id_comment = id_comment
         self.id_user = id_user
@@ -224,6 +222,7 @@ class Invitation(object):
         invited,
         id_activity,
         invite_date):
+        self.id = None
         self.invitor = invitor
         self.invited = invited
         self.id_activity = id_activity
@@ -236,6 +235,7 @@ class Conversation(object):
     query = db_session.query_property()
 
     def __init__(self, fromid, toid, time):
+        self.id = None
         self.fromid = fromid
         self.toid = toid
         self.time = time
@@ -247,6 +247,7 @@ class Reply(object):
     query = db_session.query_property()
 
     def __init__(self, reply, time, conversation_id):
+        self.id = None
         self.reply = reply
         self.time = time
         self.conversation_id = conversation_id
@@ -263,6 +264,7 @@ class Broadcast(object):
         toid,
         message,
         send_date):
+        self.id = None
         self.fromid = fromid
         self.toid = toid
         self.message = message
@@ -275,6 +277,7 @@ class Click(object):
     query = db_session.query_property()
 
     def __init__(self, id_user, id_activity, click_date):
+        self.id = None
         self.id_user = id_user
         self.idActivity = id_activity
         self.click_date = click_date
@@ -286,7 +289,8 @@ class Search(object):
     query = db_session.query_property()
 
     def __init__(self, id_user, id_activity, search_date):
-        self.id_uuser = id_user
+        self.id = None
+        self.id_user = id_user
         self.id_activity = id_activity
         self.search_date = search_date
 
@@ -297,7 +301,8 @@ class Like(object):
     query = db_session.query_property()
 
     def __init__(self, id_user, id_activity, like_date):
-        self.id_uuser = id_user
+        self.id = None
+        self.id_user = id_user
         self.id_activity = id_activity
         self.likeate = like_date
 
@@ -306,26 +311,11 @@ like = Table('l1ke', metadata, autoload=True)
 # configuration mapping
 mapper(Location, location)
 mapper(Address, address)
-mapper(User, users, properties={
-    'tags': relationship(TagUser),
-    'activities': relationship(UserActivity),
-    'comments': relationship(Comment),
-    'clicks': relationship(Click),
-    'searchs': relationship(Search),
-    'likes': relationship(Like), })
-mapper(Activity, activity, properties={
-    'tags': relationship(TagActivity),
-    'users': relationship(UserActivity),
-    'contents': relationship(ActivityContent),
-    'commnets': relationship(Comment),
-    'clicks': relationship(Click),
-    'searchs': relationship(Search),
-    'likes': relationship(Like), })
+mapper(User, users)
+mapper(Activity, activity)
 mapper(TagUser, tag_user)
 mapper(TagActivity, tag_activity)
 mapper(UserActivity, user_activity)
-mapper(UserLocation, user_location, properties={
-    'users': relationship(User), })
 mapper(ActivityContent, activity_content)
 mapper(Comment, comment)
 mapper(Following, following)
@@ -340,3 +330,14 @@ mapper(Broadcast, broadcast)
 mapper(Click, click)
 mapper(Search, search)
 mapper(Like, like)
+
+# configure foreign key relationship
+User.tags = relationship(
+    'Taguser',
+    primaryjoin='User.id==Taguser.id_user')
+User.activities = relationship(
+    'UserActivity',
+    primaryjoin='User.id==UserActivity.id_user')
+Activity.tags = relationship(
+    'TagActivity',
+    primaryjoin='Activity.id==TagActivity.id_activity')
