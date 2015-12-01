@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from database import metadata, db_session
 from sqlalchemy import Table
 from sqlalchemy.orm import mapper, relationship
@@ -32,21 +33,17 @@ address = Table('address', metadata, autoload=True)
 
 
 class User(object):
-	query = db_session.query_property()
+    query = db_session.query_property()
 
-	def __init__(
-		self,
-		image,
-		email,
-		password,
-		name):
-		self.image = image
-		self.email = email
-		self.password = password
-		self.name = name
+    def __init__(self, email, password, name, location, image=None):
+        self.location = location
+        self.image = image
+        self.email = email
+        self.password = password
+        self.name = name
 
-	def __repr__(self):
-		return '<User %r>' % (self.name)
+    def __repr__(self):
+        return '<User %%r>' % self.name
 
 users = Table('_user', metadata, autoload=True)
 
@@ -62,7 +59,8 @@ class Activity(object):
         publish_date,
         allow_number,
         like_number,
-        canceld):
+        canceld,
+        id_address):
         self.title = title
         self.start_date = start_date
         self.end_date = end_date
@@ -70,6 +68,7 @@ class Activity(object):
         self.allow_number = allow_number
         self.like_number = like_number
         self.canceld = canceld
+        self.id_address = id_address
 
     def __repr__(self):
         return '<Activity %r>' % (self.title)

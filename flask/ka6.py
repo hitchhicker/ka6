@@ -2,6 +2,8 @@
 from flask import Flask, request, session, flash, redirect,\
 	render_template, url_for
 from database import db_session
+from signup import add_user
+
 
 app = Flask(__name__)
 app.config.update(
@@ -14,17 +16,26 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/signup', methods=['GET'])
+@app.route('/signup', methods=['POST', 'GET'])
 def signup():
 	try:
-		step = request.args.get('step')
+		step = request.values.get('step')
 	except KeyError:
 		# 404 eror TODO
 		print ('error')
 	if step == '1':
 		return render_template('signup_step_1.html')
-	elif step == 1:
-		return render_template('signup_step_1.html')
+	elif step == '2':
+		try:
+			email = request.values.get('email')
+			password = request.values.get('password')
+			name = request.values.get('nickname')
+			print (email)
+		except KeyError:
+			print ('key error')  # TODO
+			raise
+		# add_user(email, password, name)
+		return render_template('signup_step_2.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
