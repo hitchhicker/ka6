@@ -38,4 +38,10 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+.error-box {  /* for the error input text fields */
+   border: 2px solid red;
+}
+.error-message {
+  color: red;
+}
 

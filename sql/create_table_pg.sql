@@ -50,7 +50,7 @@ CREATE TABLE _User (
 	image VARCHAR(2083),
 	email VARCHAR(255) UNIQUE NOT NULL,
 	password CHAR(32) NOT  NULL, /*if we use MD5 password will be size of 32 bytes*/
-	name VARCHAR(255) NOT NULL,
+	name VARCHAR(255) NOT NULL, /*to change smaller !!*/
 	id_location INTEGER,
 	PRIMARY KEY (id),
 	FOREIGN KEY (id_location) REFERENCES Location(id)

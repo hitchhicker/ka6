@@ -33,7 +33,10 @@ def signup():
 		except KeyError:
 			print ('key error')  # TODO
 			raise
-		add_user(email, password, name)
+		print (email)
+		print (password)
+		print (name)
+		# add_user(email, password, name)
 		return render_template('signup_step_2.html')
 
 
