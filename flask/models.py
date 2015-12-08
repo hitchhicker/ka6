@@ -52,7 +52,7 @@ class User(object):
         self.name = name
 
     def __repr__(self):
-        return '<User %%r>' % self.name
+        return '<User %r>' % (self.name)
 
 users = Table('_user', metadata, autoload=True)
 

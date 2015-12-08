@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function(e){
 	$("#signup").on("submit", function(){
 		return validate_form(this);
 	});
@@ -81,7 +81,7 @@ function isEqual(pw1, pw2)
 function isValidName(name)
 /**
 *
-* @param name: Input Element
+* @param pw1, pw2: Input Element
 * @return boolean
 */
 {
