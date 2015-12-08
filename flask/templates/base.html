@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ch">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,6 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
  <!--    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet"> -->
 
@@ -42,12 +41,45 @@
           <a class="navbar-brand" href="#">ka6</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          {% block connection %}{% endblock %}
+         <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="搜索">
+          </div>
+          <button type="submit" class="btn btn-default">点我</button>
+        </form>
+
+        {% if session.logged_in %}
+         <ul class="nav navbar-nav navbar-right">
+          <li class="navbar-text navbar-left">{{ session.user_name }}</li>
+            <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon glyphicon glyphicon-user"></span> </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/settings">设置</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="">test2</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="">test3</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout">退出</a></li>
+                </ul>
+            </li>
+        </ul>
+        {% else %}
+        <form class="navbar-form navbar-right" method="post" action="/login">
+        <div class="form-group">
+        <input type="text" placeholder="邮箱" class="form-control"
+          name="email">
+        </div>
+        <div class="form-group">
+        <input type="password" placeholder="密码" class="form-control"
+          name="password">
+        </div>
+        <button type="submit" class="btn btn-success">登录</button>
+        </form>
+        {% endif %}
+
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
     {% block content %}{% endblock %}
-
+      <hr>
       <footer>
         <p>&copy; 2015 team ka6</p>
       </footer>

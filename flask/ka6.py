@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, request, session, flash, redirect,\
-	render_template, url_for
+from flask import Flask, render_template
 from database import db_session
-from user_admin import add_user, is_exist
+import views
 
 
 app = Flask(__name__)
@@ -12,52 +11,17 @@ app.config.update(
 app.secret_key = \
 	b'\xac}|\xe3\x19=M\xc9\xc0\xf8\x04\x11k\x87\xa0-\xe0M\xe5Ua|\x92I'
 
-
-@app.route("/")
-def index():
-	if 'user_name' in session:
-		return render_template(
-			'index.html',
-			username=session['user_name'])
-	return render_template('index.html')
+app.add_url_rule('/', view_func=views.index)
+app.add_url_rule('/signup', view_func=views.signup, methods=['POST', ])
+app.add_url_rule('/login', view_func=views.login, methods=['POST', ])
+app.add_url_rule('/logout', view_func=views.logout)
+app.add_url_rule('/user/settings', view_func=views.settings)
 
 
-@app.route('/signup', methods=['POST', 'GET'])
-def signup():
-	try:
-		step = request.values.get('step')
-	except KeyError:
-		# 404 eror TODO
-		print('error')
-	if step == '1':
-		return render_template('signup_step_1.html')
-	elif step == '2':
-		try:
-			email = request.values.get('email')
-			password = request.values.get('password')
-			name = request.values.get('nickname')
-		except KeyError:
-			print('key error')  # TODO
-			raise
-		print(email)
-		print(password)
-		print(name)
-		add_user(email, password, name)
-		return render_template('signup_step_2.html')
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-	if request.method == 'POST':
-		if is_exist(
-			request.form['email'],
-			request.form['password']):
-			session['logged_in'] = True
-			session['user_name'] = request.form['email']
-			return redirect(url_for('index'))
-		else:
-			pass
-	# return render_template('login.html', error=error)
+# @app.errorhandler(404)
+@app.route('/404')
+def page_not_found():
+    return render_template('404.html')
 
 
 @app.teardown_request

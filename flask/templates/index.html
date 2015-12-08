@@ -1,35 +1,23 @@
 {% extends "base.html" %}
 {% block title %}首页-ka6{% endblock %}
 {% block csslink %}<link href="/static/css/index.css" rel="stylesheet">{% endblock %}
-{% block connection %}
-{% if session.logged_in %}
-<a href="">{{ session.user_name }}</a>
-  {% else %}
-<form class="navbar-form navbar-right" method="post" action="/login">
-<div class="form-group">
-<input type="text" placeholder="邮箱" class="form-control"
-  name="email">
-</div>
-<div class="form-group">
-<input type="password" placeholder="密码" class="form-control"
-  name="password">
-</div>
-<button type="submit" class="btn btn-success">登录</button>
-</form>
-  {% endif %}
-
-{% endblock %}
-        </div><!--/.navbar-collapse -->
-      </div>
-    </nav>
 {% block content %}
 <!-- Main jumbotron for a primary marketing message or call to action -->
+{% if not session.logged_in %}
 <div class="jumbotron">
   <div class="container">
     <h1>ka6</h1>
     <p>做生活的主宰</p>
-    <p><a class="btn btn-primary btn-lg" href="/signup?step=1" role="button">注册</a></p>
+    <p><a class="btn btn-primary btn-lg" href="/signup?step=init" role="button">注册</a></p>
   </div>
 </div>
 <hr>
+{% else %}
+<div class="jumbotron">
+  <div class="container">
+    <h1>ka6</h1>
+    <p>{{ session.user_name }}, 你好</p>
+  </div>
+</div>
+{% endif %}
 {% endblock %}

@@ -12,14 +12,11 @@ def add_user(email, password, name):
 	db_session.commit()
 
 
-def is_exist(email, password):
+def get_user(email, password):
 	"""Check user is exist or not
 	:params email, password: string
-	:rtype: result of login
+	:rtype: list of User instance or None
 	"""
 	pwd_hash = hashlib.md5(password.encode('utf-8')).hexdigest()
-	if User.query.filter_by(
-		email=email, password=pwd_hash).all():
-		return True
-	else:
-		False
+	return User.query.filter_by(
+		email=email, password=pwd_hash).one()
