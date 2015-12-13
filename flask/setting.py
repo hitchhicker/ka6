@@ -1,8 +1,11 @@
-#config on database
+# config on database
+
+
 DATABASE = {
+	'drivername': 'postgresql',
 	'database': 'ka6',
 	'user': 'postgres',
 	'password': 'asd123zxc',
-	'host': 'localhost',
+	'host': 'localhost',	
 	'port': '5432',
 }

@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 from flask import request, session, flash, redirect,\
 	render_template, url_for
-from user_admin import add_user, get_user
+from user_admin import add_user, get_user, add_user_tag
+
+
+def settings():
+	add_user_tag('tag', 'yubokai@gmail.com')
+	return render_template('settings.html')
 
 
 def index():
@@ -16,12 +21,10 @@ def signup():
 	try:
 		step = request.values.get('step')
 	except KeyError:
-		# 404 eror TODO
 		print('error')
 	if step == 'init':
 		return render_template('signup.html')
 	elif step == 'done':
-		print('hi')
 		try:
 			email = request.values.get('email')
 			password = request.values.get('password')
@@ -57,7 +60,3 @@ def login():
 	else:
 		pass
 	# return render_template('login.html', error=error)
-
-
-def settings():
-	return render_template('settings.html')
