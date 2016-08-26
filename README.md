@@ -1,5 +1,7 @@
 # ka6
-## web app based on flask
+## A web application, the aim is to let people create activities with different topics like travelling, the application is based on falsk.
+##DONE:
++ user case
++ primary database design
++ signup, signin
 
-### contadins all of the project except the plugin file python34_plugin.so
-### need to modify something in mysite_uwsgi.ini depending your system
